@@ -4200,6 +4200,77 @@ def shangri_la_bloomingspring4_test():
         count = count + 1
 
 
+def checkrightplatcarcion():
+    '''
+    while(True):
+        try:
+            x1,y1 = pyautogui.locateCenterOnScreen("C:/Users/Alec/Desktop/Maplestoryscript/trackplayer/player.PNG", confidence = 0.9)
+            print(x1,y1)
+
+            if(x1 == 220) and (y1 == 148):
+                break
+            elif(y1 == 169):
+                attackteleleft()
+                time.sleep(0.3)
+                attackuptp()
+                time.sleep(0.3)
+            else:
+                attackteleright()
+                time.sleep(0.3)
+            #(220 148) right platform
+            #(x,169) bottom lane
+
+        except TypeError:
+            print('cant see')
+            attackteleleft()
+            time.sleep(0.3)
+            attackuptp()
+            time.sleep(0.3)
+            pass
+    '''
+    # Load template once
+    template = cv2.imread("C:/Users/Alec/Desktop/Maplestoryscript/trackplayer/player.PNG", cv2.IMREAD_GRAYSCALE)
+    w, h = template.shape[::-1]
+
+    with mss.mss() as sct:
+        monitor = sct.monitors[1]  # Use monitor 1 (change if multi-monitor)
+
+    while True:
+        # Capture screen
+        screenshot = sct.grab(monitor)
+        img = np.array(screenshot)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        # Match template
+        result = cv2.matchTemplate(gray, template, cv2.TM_CCOEFF_NORMED)
+        _, max_val, _, max_loc = cv2.minMaxLoc(result)
+
+        # Debug info
+        print(f"Match confidence: {max_val:.4f}")
+
+        if max_val >= 0.90:
+            center_x = max_loc[0] + w // 2
+            center_y = max_loc[1] + h // 2
+            print(f"Match found at: {center_x}, {center_y}")
+
+            if center_x == 220 and center_y == 148:
+                break
+            elif center_y == 169:
+                attackteleleft()
+                time.sleep(0.3)
+                attackuptp()
+                time.sleep(0.3)
+            else:
+                attackteleright()
+                time.sleep(0.3)
+
+        else:
+            print("Can't see player - defaulting to left attack")
+            attackteleleft()
+            time.sleep(0.3)
+            attackuptp()
+            time.sleep(0.3)
+
 
 def sunkenruins4():
     count = 50
@@ -5509,6 +5580,11 @@ def artale_rope():
 #(168,y) middle of left platforms
 
 #(234,y) middle of right platforms
+
+
+def human_delay(min_time=0.1, max_time=0.3):
+    time.sleep(random.uniform(min_time, max_time))
+
 
 #---------------------------------------------------------------------------------------
 
